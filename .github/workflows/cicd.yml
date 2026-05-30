@@ -2,6 +2,7 @@ name: cicd
 on:
   workflow_dispatch:
 jobs:
+# Every job needs separate runneer, it is called parallesim
   code:
     runs-on: ubuntu-latest
     steps:
@@ -9,16 +10,19 @@ jobs:
         run: echo "code clone from github"
 
   build:
+    needs: [code]
     runs-on: ubuntu-latest
     steps:
       - name: build docker container
         run: echo "Docker container build"
   test:
+    needs: [build]
     runs-on: ubuntu-latest
     steps:
       - name: test the container
         run: echo "test the container"
   deploy:
+    needs: [build,test]
     runs-on: ubuntu-latest
     steps:
       - name: Deploy the container
