@@ -1,6 +1,18 @@
 name: cicd
 on:
   workflow_dispatch:
+    inputs:
+      enviornment:
+        description: This is the enviornment value where the workflow runs
+        default: 'dev'
+        required: true
+        type: choice
+        options:
+            - dev
+            - staging
+            - prod
+
+  
 jobs:
 # Every job needs separate runneer, it is called parallesim
   code:
@@ -22,6 +34,7 @@ jobs:
       - name: test the container
         run: echo "test the container"
   deploy:
+    if: inputs.enviornment=='dev'
     needs: [build,test]
     runs-on: ubuntu-latest
     steps:
